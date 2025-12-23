@@ -5,3 +5,4 @@ plotly
 joblib
 scikit-learn
 torch
+xgboost
