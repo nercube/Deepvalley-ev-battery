@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
+
+# Optional dependency: Plotly
 try:
     import plotly.express as px
 except ModuleNotFoundError:
     px = None
-if px is None:
-    st.error("Plotly not available. Check requirements.txt")
-    return
+
+PLOTLY_AVAILABLE = px is not None
 
 from src.validation.csv_schema import normalize_columns, validate_schema
 from src.utils.audit_logger import log_event
@@ -72,6 +73,10 @@ def monitoring_page():
     st.header("📊 SOH Monitoring")
     st.caption("Trend & stability monitoring (no accuracy metrics)")
 
+    if not PLOTLY_AVAILABLE:
+        st.error("Plotly is not available. Please check requirements.txt")
+        return
+
     uploaded = st.file_uploader(
         "Upload BMS CSV",
         type=["csv"],
@@ -82,7 +87,7 @@ def monitoring_page():
         st.info("Upload a CSV to begin monitoring")
         return
 
-    # ❗ ALWAYS normalize again
+    # ❗ Always normalize again
     df = pd.read_csv(uploaded)
     df, _ = normalize_columns(df)
 
@@ -138,6 +143,10 @@ def monitoring_page():
 # 📈 DASHBOARD
 # =========================================================
 def render_monitoring_dashboard(df):
+    if not PLOTLY_AVAILABLE:
+        st.warning("Plotly charts are disabled")
+        return
+
     st.subheader("Summary")
 
     c1, c2, c3 = st.columns(3)
