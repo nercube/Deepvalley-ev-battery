@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+try:
+    import plotly.express as px
+except ModuleNotFoundError:
+    px = None
+if px is None:
+    st.error("Plotly not available. Check requirements.txt")
+    return
 
 from src.validation.csv_schema import normalize_columns, validate_schema
 from src.utils.audit_logger import log_event
@@ -186,3 +192,4 @@ def stability_label(df):
 def drift_label(df):
     slope = df["soh_meta"].iloc[-1] - df["soh_meta"].iloc[0]
     return "ELEVATED" if slope < -0.15 else "LOW"
+
