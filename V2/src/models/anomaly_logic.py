@@ -73,8 +73,6 @@ class LSTMAutoEncoder(nn.Module):
 # =================================================
 _if_model = joblib.load(IF_MODEL_PATH)
 
-_ae_scaler = joblib.load(AE_SCALER_PATH)
-
 _ae_model = LSTMAutoEncoder(input_dim=len(AE_FEATURES))
 _ae_model.load_state_dict(torch.load(AE_MODEL_PATH, map_location="cpu"))
 _ae_model.eval()
@@ -122,7 +120,7 @@ def detect_anomaly(sequence_20x11: np.ndarray, if_features_row: pd.DataFrame):
     seq_df = pd.DataFrame(sequence_20x11, columns=LSTM_FEATURES)[AE_FEATURES]
 
     flat = seq_df.values
-    flat_scaled = _ae_scaler.transform(flat)
+    flat_scaled = (flat - flat.mean(axis=0)) / (flat.std(axis=0) + 1e-6)
 
     if flat_scaled.shape[0] < WINDOW:
         pad = np.repeat(flat_scaled[:1], WINDOW - flat_scaled.shape[0], axis=0)
@@ -158,3 +156,4 @@ def detect_anomaly(sequence_20x11: np.ndarray, if_features_row: pd.DataFrame):
         "if_norm": if_norm,
         "ae_norm": ae_norm,
     }
+
