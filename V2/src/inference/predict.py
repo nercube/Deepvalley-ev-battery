@@ -35,7 +35,6 @@ def load_models():
     """
 
     import joblib
-    from tensorflow.keras.models import load_model
 
     xgb_model = joblib.load(
         BASE_PATH / "artifacts/models/baseline_xgb_soh_model.joblib"
@@ -122,3 +121,4 @@ def predict_soh(features_df: pd.DataFrame) -> pd.DataFrame:
     df["soh_meta"] = soh_meta
 
     return df
+
