@@ -8,3 +8,4 @@ torch
 xgboost
 torch
 joblib
+tensorflow
