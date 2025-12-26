@@ -1,0 +1,17 @@
+{
+  "version": "v1.0",
+  "logic": "OR",
+  "zones": ["NORMAL", "WATCH", "UNSAFE"],
+
+  "if_min": -1.0,
+  "if_max": 1.0,
+
+  "ae_min": 0.0,
+
+  "if_p97": 0.97,
+  "if_p99": 0.99,
+  "ae_p97": 0.97,
+  "ae_p99": 0.99,
+
+  "description": "Anomaly fusion config for ideal EV rickshaw driver"
+}
